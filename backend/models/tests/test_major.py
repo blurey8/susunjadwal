@@ -1,7 +1,7 @@
 import pytest
 from mongoengine import ValidationError
 
-from .major import Major
+from models.major import Major
 from .utils import TestBase
 
 

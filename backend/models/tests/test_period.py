@@ -3,8 +3,8 @@ import random
 import pytest
 from mongoengine import ValidationError
 
-from .major import Major
-from .period import ScheduleItem, Class, Course, Period
+from models.major import Major
+from models.period import ScheduleItem, Class, Course, Period
 from .utils import TestBase
 
 

@@ -3,9 +3,9 @@ import datetime
 import pytest
 from mongoengine import ValidationError
 
-from .major import Major
-from .user import User
-from .user_schedule import ScheduleItem, UserSchedule
+from models.major import Major
+from models.user import User
+from models.user_schedule import ScheduleItem, UserSchedule
 from .utils import TestBase
 
 
