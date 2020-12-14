@@ -3,7 +3,7 @@ from mongoengine import ValidationError
 
 from models.user import User
 from models.major import Major
-from .utils import TestBase
+from .test_utils import TestBase
 
 
 class TestUser(TestBase):

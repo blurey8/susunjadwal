@@ -5,7 +5,7 @@ from mongoengine import ValidationError
 
 from models.major import Major
 from models.period import ScheduleItem, Class, Course, Period
-from .utils import TestBase
+from .test_utils import TestBase
 
 
 class TestScheduleItem(TestBase):
@@ -18,12 +18,10 @@ class TestScheduleItem(TestBase):
         )
 
         serialized_schedule_item = schedule_item.serialize()
-
-        keys = serialized_schedule_item.keys()
-        assert "day" in keys
-        assert "start" in keys
-        assert "end" in keys
-        assert "room" in keys
+        self.assert_serialization_contains_keys(
+            keys=["day", "start", "end", "room"],
+            serialized_object=serialized_schedule_item,
+        )
 
     def test_serialization_values(self):
         schedule_item = ScheduleItem(
@@ -87,10 +85,10 @@ class TestClass(TestBase):
 
         serialized_class_item = class_item.serialize()
 
-        keys = serialized_class_item.keys()
-        assert "name" in keys
-        assert "lecturer" in keys
-        assert "schedule_items" in keys
+        self.assert_serialization_contains_keys(
+            keys=["name", "lecturer", "schedule_items"],
+            serialized_object=serialized_class_item,
+        )
 
     def test_serialize_with_empty_schedules(self):
         class_item = Class(
@@ -170,11 +168,10 @@ class TestCourse(TestBase):
 
         serialized_course = course.serialize()
 
-        keys = serialized_course.keys()
-        assert "name" in keys
-        assert "credit" in keys
-        assert "term" in keys
-        assert "classes" in keys
+        self.assert_serialization_contains_keys(
+            keys=["name", "credit", "term", "classes"],
+            serialized_object=serialized_course,
+        )
 
     def test_serialization_with_empty_classes(self):
         course = Course(
@@ -339,10 +336,9 @@ class TestPeriod(TestBase):
 
         serialized_period = period.serialize()
 
-        keys = serialized_period.keys()
-        assert "name" in keys
-        assert "is_detail" in keys
-        assert "courses" in keys
+        self.assert_serialization_contains_keys(
+            keys=["name", "is_detail", "courses"], serialized_object=serialized_period
+        )
 
     def test_serialize_with_empty_courses(self):
         period = Period(

@@ -15,7 +15,7 @@ class ScheduleItem(mongo.EmbeddedDocument):
             "day": self.day,
             "room": self.room,
             "start": self.start,
-            "end": self.end
+            "end": self.end,
         }
 
 
@@ -42,5 +42,5 @@ class UserSchedule(mongo.Document):
             "id": str(self.id),
             "name": self.name,
             "created_at": self.created_at,
-            "schedule_items": self.__get_schedule_items()
+            "schedule_items": self.__get_schedule_items(),
         }

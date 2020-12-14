@@ -12,7 +12,7 @@ class ScheduleItem(mongo.EmbeddedDocument):
             "day": self.day,
             "start": self.start,
             "end": self.end,
-            "room": self.room
+            "room": self.room,
         }
 
 
@@ -31,7 +31,7 @@ class Class(mongo.EmbeddedDocument):
         return {
             "name": self.name,
             "lecturer": self.lecturer,
-            "schedule_items": self.__get_schedule_items()
+            "schedule_items": self.__get_schedule_items(),
         }
 
 
@@ -52,7 +52,7 @@ class Course(mongo.EmbeddedDocument):
             "name": self.name,
             "credit": self.credit,
             "term": self.term,
-            "classes": self.__get_classes()
+            "classes": self.__get_classes(),
         }
 
 
@@ -73,5 +73,5 @@ class Period(mongo.Document):
         return {
             "name": self.name,
             "is_detail": self.is_detail,
-            "courses": self.__get_courses()
+            "courses": self.__get_courses(),
         }

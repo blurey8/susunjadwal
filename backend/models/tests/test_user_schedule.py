@@ -6,7 +6,7 @@ from mongoengine import ValidationError
 from models.major import Major
 from models.user import User
 from models.user_schedule import ScheduleItem, UserSchedule
-from .utils import TestBase
+from .test_utils import TestBase
 
 
 class TestScheduleItem(TestBase):
@@ -21,12 +21,10 @@ class TestScheduleItem(TestBase):
 
         serialized_schedule_item = schedule_item.serialize()
 
-        keys = serialized_schedule_item.keys()
-        assert "name" in keys
-        assert "day" in keys
-        assert "start" in keys
-        assert "end" in keys
-        assert "room" in keys
+        self.assert_serialization_contains_keys(
+            keys=["name", "day", "start", "end", "room"],
+            serialized_object=serialized_schedule_item,
+        )
 
     def test_serialization_values(self):
         schedule_item = ScheduleItem(
@@ -202,11 +200,10 @@ class TestUserSchedule(TestBase):
 
         serialized_user_schedule = user_schedule.serialize()
 
-        keys = serialized_user_schedule.keys()
-        assert "id" in keys
-        assert "name" in keys
-        assert "created_at" in keys
-        assert "schedule_items" in keys
+        self.assert_serialization_contains_keys(
+            keys=["id", "name", "created_at", "schedule_items"],
+            serialized_object=serialized_user_schedule,
+        )
 
     def test_serialize_with_empty_schedule_items(self):
         user_schedule = UserSchedule(
