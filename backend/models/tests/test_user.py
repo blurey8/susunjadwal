@@ -4,7 +4,6 @@ from mongoengine import ValidationError
 from models.user import User
 from models.major import Major
 from .test_utils import TestBase
-from utils.fixtures import mongo
 
 
 @pytest.mark.usefixtures("mongo")

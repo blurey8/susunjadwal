@@ -7,7 +7,6 @@ from models.major import Major
 from models.user import User
 from models.user_schedule import ScheduleItem, UserSchedule
 from .test_utils import TestBase
-from utils.fixtures import mongo
 
 
 @pytest.mark.usefixtures("mongo")

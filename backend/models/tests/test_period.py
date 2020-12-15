@@ -6,7 +6,6 @@ from mongoengine import ValidationError
 from models.major import Major
 from models.period import ScheduleItem, Class, Course, Period
 from .test_utils import TestBase
-from utils.fixtures import mongo
 
 
 @pytest.mark.usefixtures("mongo")
