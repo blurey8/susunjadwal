@@ -4,8 +4,10 @@ from mongoengine import ValidationError
 from models.user import User
 from models.major import Major
 from .test_utils import TestBase
+from utils.fixtures import mongo
 
 
+@pytest.mark.usefixtures("mongo")
 class TestUser(TestBase):
     def test_user_creation(self):
         major = Major.objects().create(name="Test_Name", kd_org="Test_KD_ORG")

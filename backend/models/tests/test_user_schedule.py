@@ -7,8 +7,10 @@ from models.major import Major
 from models.user import User
 from models.user_schedule import ScheduleItem, UserSchedule
 from .test_utils import TestBase
+from utils.fixtures import mongo
 
 
+@pytest.mark.usefixtures("mongo")
 class TestScheduleItem(TestBase):
     def test_serialization_contains_required_keys(self):
         schedule_item = ScheduleItem(
@@ -86,6 +88,7 @@ class TestScheduleItem(TestBase):
                 ).validate()
 
 
+@pytest.mark.usefixtures("mongo")
 class TestUserSchedule(TestBase):
     @classmethod
     def generate_random_user_item(cls):

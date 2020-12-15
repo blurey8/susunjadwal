@@ -6,8 +6,10 @@ from mongoengine import ValidationError
 from models.major import Major
 from models.period import ScheduleItem, Class, Course, Period
 from .test_utils import TestBase
+from utils.fixtures import mongo
 
 
+@pytest.mark.usefixtures("mongo")
 class TestScheduleItem(TestBase):
     def test_serialization_contains_required_keys(self):
         schedule_item = ScheduleItem(
@@ -66,6 +68,7 @@ class TestScheduleItem(TestBase):
                 ).validate()
 
 
+@pytest.mark.usefixtures("mongo")
 class TestClass(TestBase):
     @classmethod
     def generate_random_schedule_item(cls):
@@ -141,6 +144,7 @@ class TestClass(TestBase):
                 ).validate()
 
 
+@pytest.mark.usefixtures("mongo")
 class TestCourse(TestBase):
     @classmethod
     def generate_random_class_item(cls):
@@ -237,6 +241,7 @@ class TestCourse(TestBase):
                 ).validate()
 
 
+@pytest.mark.usefixtures("mongo")
 class TestPeriod(TestBase):
     @classmethod
     def generate_random_major_item(cls):

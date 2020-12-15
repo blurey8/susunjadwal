@@ -1,7 +1,8 @@
 import pytest
-import mongoengine as me
+from mongoengine import disconnect, connect
 
-@pytest.fixture(scope='function')
+
+@pytest.fixture(scope="function")
 def mongo(request):
     """Use this fixtures for setup and teardown database every test method.
 
@@ -19,12 +20,12 @@ def mongo(request):
     ```
     """
     # Set up
-    me.disconnect()
-    db = me.connect('testdb', host='mongomock://localhost')
+    disconnect()
+    db = connect("testdb", host="mongomock://localhost")
 
     # Run test method
     yield db
 
     # Tear down
-    db.drop_database('testdb')
-    me.disconnect()
+    db.drop_database("testdb")
+    disconnect()
