@@ -11,6 +11,11 @@
 1. Install all dependencies using `npm install`
 2. Run the project by using `npm start`
 
+### Development with Docker
+
+1. Start the container with `docker-compose up --build`
+2. Access the app at port 3001, e.g. `localhost:3001`
+
 ### Production
 
 1. Run `npm run build`
