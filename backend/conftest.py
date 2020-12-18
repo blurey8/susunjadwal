@@ -7,7 +7,14 @@ from app import app
 
 @pytest.fixture(scope='module')
 def client():
-    """Generate test client for every module"""
+    """Generate test client for every module.
+
+    How to use this fixture for a method:
+    ```
+    def test_xxx(self, client):
+        # Use client to make request
+    ```
+    """
     with app.test_client() as client:
         with app.app_context():
             app.config.update(
