@@ -49,6 +49,22 @@ You can quit mongo console now by using Ctrl + D.
 9. Create config file, `instance/config.cfg`. You can see `instance/config.template.cfg` for example and edit db name, username, and password to match the one you created before
 10. Finally, run Flask by using `FLASK_ENV="development" flask run`
 
+### Development with Docker
+
+1. Do step #4 from [Development](#development).
+2. Do step #9 from [Development](#development) but change the following settings accordingly:
+   
+   - `MONGODB_DB` : `test`
+   - `MONGODB_HOST` : `db`
+   - `MONGODB_USERNAME` : `mongo_user`
+   - `MONGODB_PASSWORD` : `mongo_password`
+3. Start the containers with `docker-compose up -d --build`
+4. Go to Mongo console by running `docker-compose exec db mongo -u mongo_user`
+5. Do steps #7 and #8 from [Development](#development).
+6. To stop the containers, run `docker-compose down`
+
+For subsequent uses, you can just do steps #3 and #6 above.
+
 ### Production
 
 > We actually have a slightly different setup in the real Ristek server. For future maintainers, you may want to contact past contributors.
