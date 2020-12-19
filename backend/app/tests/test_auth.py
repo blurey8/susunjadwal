@@ -2,6 +2,7 @@ import pytest
 from .utils import BASE_PATH, SERVICE_URL, get_ticket_from_sso_ui
 
 
+@pytest.mark.sso
 @pytest.mark.usefixtures('mongo')
 class TestAuth:
     """Test authentication endpoint"""
