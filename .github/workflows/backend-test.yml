@@ -4,9 +4,7 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    
     defaults:
       run:
         working-directory: ./backend
@@ -29,9 +27,12 @@ jobs:
       run: |
         sed 's/[<>]//g' instance/config.template.cfg > instance/config.cfg
         echo {\"${ORG_CODE}\": {\"username\": \"${USERNAME}\", \"password\": \"${PASSWORD}\"}} > scraper/credentials.json
-    - name: Test with pytest
+    - name: Quick test with pytest
       run: |
-        pytest
+        pytest -m 'not sso'
+    - name: Slow Test with pytest (SSO UI related)
+      run: |
+        pytest -m 'sso' -rs
     - name: Cleanup configuration
       run: |
         rm instance/config.cfg
