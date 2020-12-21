@@ -3,13 +3,13 @@ import requests
 from app import app
 from bs4 import BeautifulSoup
 from six.moves import urllib_parse
-from scraper.main import fetch_credential
+from scraper.main import fetch_credential, DEFAULT_CREDENTIAL
+from json.decoder import JSONDecodeError
 
 
 SERVICE_URL = "http://127.0.0.1:3000/"
 SSO_ROOT_URL = "https://sso.ui.ac.id"
 AUTH_URL = f"{SSO_ROOT_URL}/cas2/login?service={SERVICE_URL}"
-DEFAULT_CREDENTIAL = "01.00.12.01"
 BASE_PATH = app.config["BASE_PATH"]
 
 
@@ -45,3 +45,19 @@ def get_ticket_from_sso_ui():
             return ticket_match.group(1)
         else:
             raise Exception('Ticket not found')
+
+
+def is_credentials_available():
+    """
+    Check if scraper/credentials.json exists
+    with correct major code, username, password structure
+    """
+    try:
+        username, password = fetch_credential(DEFAULT_CREDENTIAL)
+    except (TypeError, FileNotFoundError, JSONDecodeError):
+        return False
+
+    if (username is None) or (password is None):
+        return False
+
+    return True

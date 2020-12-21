@@ -1,7 +1,11 @@
 import pytest
-from .utils import BASE_PATH, SERVICE_URL, get_ticket_from_sso_ui
+from .utils import (BASE_PATH, SERVICE_URL,
+                    get_ticket_from_sso_ui, is_credentials_available)
 
 
+@pytest.mark.sso
+@pytest.mark.skipif(condition=not is_credentials_available(),
+                    reason='SSO credentials is not available')
 @pytest.mark.usefixtures('mongo')
 class TestAuth:
     """Test authentication endpoint"""
