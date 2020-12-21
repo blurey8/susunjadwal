@@ -1,5 +1,24 @@
 # Susun Jadwal Backend
 
+- [Susun Jadwal Backend](#susun-jadwal-backend)
+  - [Requirements](#requirements)
+  - [Configuration](#configuration)
+    - [Development](#development)
+    - [Development with Docker](#development-with-docker)
+    - [Production](#production)
+  - [API Documentation](#api-documentation)
+    - [Definition](#definition)
+      - [Parameter](#parameter)
+      - [Permission](#permission)
+    - [API Endpoint](#api-endpoint)
+      - [Authorization](#authorization)
+      - [Get Courses](#get-courses)
+      - [Save User Schedule](#save-user-schedule)
+      - [Get User Schedule Detail](#get-user-schedule-detail)
+      - [Delete User Schedule](#delete-user-schedule)
+      - [Rename User Schedule](#rename-user-schedule)
+  - [License](#license)
+
 ## Requirements
 
 1. `python` and `pip`
