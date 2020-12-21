@@ -1,14 +1,17 @@
 import re
 import requests
+from app import app
 from bs4 import BeautifulSoup
 from six.moves import urllib_parse
 from scraper.main import fetch_credential
 
 
 SERVICE_URL = "http://127.0.0.1:3000/"
-BASE_URL = "https://sso.ui.ac.id"
-AUTH_URL = f"{BASE_URL}/cas2/login?service={SERVICE_URL}"
+SSO_ROOT_URL = "https://sso.ui.ac.id"
+AUTH_URL = f"{SSO_ROOT_URL}/cas2/login?service={SERVICE_URL}"
 DEFAULT_CREDENTIAL = "01.00.12.01"
+BASE_PATH = app.config["BASE_PATH"]
+
 
 def get_ticket_from_sso_ui():
     try:
@@ -33,7 +36,7 @@ def get_ticket_from_sso_ui():
         formdata['password'] = password
 
         # Send payload to login URL
-        post_url = urllib_parse.urljoin(BASE_URL, form['action'])
+        post_url = urllib_parse.urljoin(SSO_ROOT_URL, form['action'])
 
         # Search ticket
         r = req.post(post_url, data=formdata, allow_redirects=True)

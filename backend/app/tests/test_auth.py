@@ -1,8 +1,5 @@
 import pytest
-from app import app
-from app.tests.utils import SERVICE_URL, get_ticket_from_sso_ui
-
-BASE_PATH = app.config["BASE_PATH"]
+from .utils import BASE_PATH, SERVICE_URL, get_ticket_from_sso_ui
 
 
 @pytest.mark.usefixtures('mongo')
