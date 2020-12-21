@@ -18,7 +18,7 @@ services:
     image: mongo
     container_name: ristek-mongo
     ports:
-      - 37017:27017
+      - 37017:37017
     restart: always
     environment:
       - MONGO_INITDB_ROOT_USERNAME=mongo_user
