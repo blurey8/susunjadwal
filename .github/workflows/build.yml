@@ -1,6 +1,9 @@
 # Start by giving a name to your workflow
 name: Analyze branch
 
+# then define on which event, here a push
+on: [push]
+
 # We can now build our job
 jobs:
   build:
