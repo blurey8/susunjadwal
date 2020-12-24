@@ -1,13 +1,6 @@
 # Start by giving a name to your workflow
 name: Analyze branch
 
-# then define on which event, here a push
-on:
-  push:
-  # and the target with some regex to match our specific  branch names
-    branches:
-      - lutfi/setup_sonarqube
-
 # We can now build our job
 jobs:
   build:
