@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import Helmet from "react-helmet";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import Helmet from 'react-helmet';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { getSchedule, postRenameSchedule } from "services/api";
-import { makeAtLeastMs } from "utils/promise";
-import { setLoading } from "redux/modules/appState";
+import { getSchedule, postRenameSchedule } from 'services/api';
+import { makeAtLeastMs } from 'utils/promise';
+import { setLoading } from 'redux/modules/appState';
 
-import Schedule from "./Schedule";
-import ControlledInput from "./ControlledInput";
-import { decodeHtmlEntity } from "utils/string";
+import { decodeHtmlEntity } from 'utils/string';
+import Schedule from './Schedule';
+import ControlledInput from './ControlledInput';
 
 function ViewSchedule({ match }) {
   const dispatch = useDispatch();
-  const isMobile = useSelector(state => state.appState.isMobile);
-  const auth = useSelector(state => state.auth);
+  const isMobile = useSelector((state) => state.appState.isMobile);
+  const auth = useSelector((state) => state.auth);
 
   const [schedule, setSchedule] = useState(null);
 
@@ -29,7 +29,7 @@ function ViewSchedule({ match }) {
     async function fetchSchedule() {
       dispatch(setLoading(true));
       const {
-        data: { user_schedule }
+        data: { user_schedule },
       } = await makeAtLeastMs(getSchedule(match.params.scheduleId), 1000);
       setSchedule(user_schedule);
       dispatch(setLoading(false));
@@ -40,10 +40,10 @@ function ViewSchedule({ match }) {
   const scheduleName = schedule && schedule.name;
 
   return (
-    <React.Fragment>
+    <>
       <Helmet
-        title={scheduleName ? `Jadwal ${scheduleName}` : `Memuat jadwal ...`}
-        meta={[{ name: "description", content: "Description of Jadwal" }]}
+        title={scheduleName ? `Jadwal ${scheduleName}` : 'Memuat jadwal ...'}
+        meta={[{ name: 'description', content: 'Description of Jadwal' }]}
       />
 
       {schedule && (
@@ -72,7 +72,7 @@ function ViewSchedule({ match }) {
         showLabel
         showRoom
       />
-    </React.Fragment>
+    </>
   );
 }
 
@@ -85,6 +85,6 @@ const Container = styled.div`
 const ScheduleName = styled.div`
   font-size: 32px;
   color: white;
-`
+`;
 
 export default ViewSchedule;

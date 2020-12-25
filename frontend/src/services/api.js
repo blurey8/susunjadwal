@@ -1,14 +1,14 @@
-import axios from "axios";
-import config from "config";
+import axios from 'axios';
+import config from 'config';
 
 let instance = axios.create({
-  baseURL: config.API_BASE_URL
+  baseURL: config.API_BASE_URL,
 });
 
 export function setupAxiosInstance(token) {
   instance = axios.create({
     baseURL: config.API_BASE_URL,
-    headers: { Authorization: `Bearer ${token}` }
+    headers: { Authorization: `Bearer ${token}` },
   });
 }
 
@@ -18,7 +18,7 @@ export function getCourses(majorId) {
 
 export function postSaveSchedule(userId, scheduleItems) {
   return instance.post(`/users/${userId}/user_schedule`, {
-    schedule_items: scheduleItems
+    schedule_items: scheduleItems,
   });
 }
 
@@ -31,16 +31,16 @@ export function getSchedules(userId) {
 }
 
 export function postAuthTicket(ticket, serviceUrl) {
-  return instance.post(`/auth/`, {
+  return instance.post('/auth/', {
     ticket,
-    service_url: serviceUrl
+    service_url: serviceUrl,
   });
 }
 
 export function postRenameSchedule(userId, scheduleId, name) {
   return instance.post(
     `/users/${userId}/user_schedules/${scheduleId}/change_name`,
-    { name }
+    { name },
   );
 }
 

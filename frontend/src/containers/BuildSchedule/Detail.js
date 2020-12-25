@@ -1,10 +1,10 @@
-import React from "react";
-import styled, { createGlobalStyle } from "styled-components";
-import { useSelector } from "react-redux";
+import React from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
+import { useSelector } from 'react-redux';
 
-import SelectedCourses from "containers/SelectedCourses";
-import Schedule from "containers/ViewSchedule/Schedule";
-import backImg from "assets/Back.svg";
+import SelectedCourses from 'containers/SelectedCourses';
+import Schedule from 'containers/ViewSchedule/Schedule';
+import backImg from 'assets/Back.svg';
 
 const HideBodyOverflow = createGlobalStyle`
   body {
@@ -14,17 +14,15 @@ const HideBodyOverflow = createGlobalStyle`
 
 function transformSchedules(schedules) {
   return schedules
-    .map(schedule =>
-      schedule.schedule_items.map(item => ({
-        ...item,
-        name: schedule.name
-      }))
-    )
+    .map((schedule) => schedule.schedule_items.map((item) => ({
+      ...item,
+      name: schedule.name,
+    })))
     .reduce((prev, now) => [...prev, ...now], []);
 }
 
 function Detail({ closeDetail, isConflict }) {
-  const schedules = useSelector(state => state.schedules);
+  const schedules = useSelector((state) => state.schedules);
 
   function performCloseDetail() {
     closeDetail();

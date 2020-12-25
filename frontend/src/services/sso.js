@@ -1,4 +1,4 @@
-import config from "config";
+import config from 'config';
 
 const { SSO_UI_URL, DOMAIN, BASE_URL } = config;
 

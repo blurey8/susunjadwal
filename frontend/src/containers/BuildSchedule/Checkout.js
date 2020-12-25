@@ -1,19 +1,17 @@
-import React from "react";
-import styled from "styled-components";
-import { useSelector } from "react-redux";
-import { isScheduleConflict } from "containers/SelectedCourses/utils";
+import React from 'react';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { isScheduleConflict } from 'containers/SelectedCourses/utils';
 
 function Checkout({ onClickDetail }) {
-  const isMobile = useSelector(state => state.appState.isMobile);
-  const schedules = useSelector(state => state.schedules);
+  const isMobile = useSelector((state) => state.appState.isMobile);
+  const schedules = useSelector((state) => state.schedules);
   if (!isMobile || schedules.length === 0) {
     return null;
   }
 
   const totalCredits = schedules.reduce((prev, { credit }) => prev + credit, 0);
-  const conflict = schedules.find(schedule =>
-    isScheduleConflict(schedules, schedule)
-  );
+  const conflict = schedules.find((schedule) => isScheduleConflict(schedules, schedule));
 
   function goToDetail() {
     onClickDetail(conflict);
@@ -22,12 +20,17 @@ function Checkout({ onClickDetail }) {
     <CheckoutContainer conflict={conflict} onClick={goToDetail}>
       <div>
         <h2>
-          {schedules.length} Mata Kuliah | {totalCredits} SKS
+          {schedules.length}
+          {' '}
+          Mata Kuliah |
+          {totalCredits}
+          {' '}
+          SKS
         </h2>
         <p>
           {conflict
-            ? "Terdapat jadwal yang bentrok."
-            : "Tidak ada konflik jadwal."}
+            ? 'Terdapat jadwal yang bentrok.'
+            : 'Tidak ada konflik jadwal.'}
         </p>
       </div>
       <div>
@@ -38,7 +41,7 @@ function Checkout({ onClickDetail }) {
 }
 
 const CheckoutContainer = styled.div`
-  background: ${props => (props.conflict ? "#C74550" : "#333333")};
+  background: ${(props) => (props.conflict ? '#C74550' : '#333333')};
   color: #ffffff;
   position: fixed;
   justify-content: space-between;

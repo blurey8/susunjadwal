@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 
-import { persistAuth } from "utils/auth";
-import { redirectToSSOLogout } from "services/sso";
-import { setAuth } from "redux/modules/auth";
-import { setLoading } from "redux/modules/appState";
+import { persistAuth } from 'utils/auth';
+import { redirectToSSOLogout } from 'services/sso';
+import { setAuth } from 'redux/modules/auth';
+import { setLoading } from 'redux/modules/appState';
 
 function Logout() {
   const dispatch = useDispatch();
