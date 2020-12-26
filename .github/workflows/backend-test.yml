@@ -34,10 +34,15 @@ jobs:
       run: |
         coverage run --include="sso/*" --append -m pytest -rs
     - name: Combine and generate coverage data
-      run: /
+      run: |
         coverage combine
-        coverage xml
+        coverage xml -i
     - name: Cleanup configuration
       run: |
         rm instance/config.cfg
         rm scraper/credentials.json
+    steps:
+      - uses: actions/upload-artifact@v2
+        with:
+          name: coverage.xml
+          path: ./coverage.xml
