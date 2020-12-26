@@ -37,14 +37,25 @@ jobs:
       run: |
         coverage run --include="app/*,instance/*,models/*,scraper/*,sso/*,uploader/*" -m pytest
         coverage xml -i
+    - name: Upload coverage.xml result
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage
+        path: coverage.xml
     - name: Cleanup configuration
       run: |
         rm instance/config.cfg
         rm scraper/credentials.json
 
   sonarqube:
+    needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Download coverage result from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage
+
       # Use an existing action, you can look in the market place to find what you need and how to use it, to setup the sonar scanner
       - name: Setup sonar scanner
         uses: warchant/setup-sonar-scanner@v1
