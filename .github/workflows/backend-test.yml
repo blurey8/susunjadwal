@@ -9,48 +9,50 @@ jobs:
       run:
         working-directory: ./backend
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.x
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install wheel
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Setup configuration
-      env:
-        ORG_CODE: ${{ secrets.SSO_ORG_CODE }}
-        USERNAME: ${{ secrets.SSO_USERNAME }}
-        PASSWORD: ${{ secrets.SSO_PASSWORD }}
-      run: |
-        sed 's/[<>]//g' instance/config.template.cfg > instance/config.cfg
-        echo {\"${ORG_CODE}\": {\"username\": \"${USERNAME}\", \"password\": \"${PASSWORD}\"}} > scraper/credentials.json
-    # - name: Quick test with pytest and measure code coverage
-    #   run: |
-    #     coverage run --include="app/*,instance/*,models/*,scraper/*,uploader/*" -m pytest --ignore="app/tests/test_auth.py"
-    # - name: Slow Test with pytest (SSO UI related)
-    #   run: |
-    #     coverage run --include="sso/*" --append -m pytest -rs
-    - name: Run all tests with pytest and measure code coverage
-      run: |
-        coverage run --include="app/*,instance/*,models/*,scraper/*,sso/*,uploader/*" -m pytest
-        coverage xml -i
-    - name: Upload coverage.xml result
-      uses: actions/upload-artifact@v2
-      with:
-        name: coverage
-        path: coverage.xml
-    - name: Cleanup configuration
-      run: |
-        rm instance/config.cfg
-        rm scraper/credentials.json
+      - shell: bash
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install wheel
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Setup configuration
+        env:
+          ORG_CODE: ${{ secrets.SSO_ORG_CODE }}
+          USERNAME: ${{ secrets.SSO_USERNAME }}
+          PASSWORD: ${{ secrets.SSO_PASSWORD }}
+        run: |
+          sed 's/[<>]//g' instance/config.template.cfg > instance/config.cfg
+          echo {\"${ORG_CODE}\": {\"username\": \"${USERNAME}\", \"password\": \"${PASSWORD}\"}} > scraper/credentials.json
+      # - name: Quick test with pytest and measure code coverage
+      #   run: |
+      #     coverage run --include="app/*,instance/*,models/*,scraper/*,uploader/*" -m pytest --ignore="app/tests/test_auth.py"
+      # - name: Slow Test with pytest (SSO UI related)
+      #   run: |
+      #     coverage run --include="sso/*" --append -m pytest -rs
+      - name: Run all tests with pytest and measure code coverage
+        run: |
+          coverage run --include="app/*,instance/*,models/*,scraper/*,sso/*,uploader/*" -m pytest
+          coverage xml -i
+      - name: Upload coverage.xml result
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: coverage.xml
+      - name: Cleanup configuration
+        run: |
+          rm instance/config.cfg
+          rm scraper/credentials.json
 
   sonarqube:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - shell: bash
       - name: Download coverage result from build job
         uses: actions/download-artifact@v2
         with:
