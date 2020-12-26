@@ -9,31 +9,94 @@ jobs:
       run:
         working-directory: ./backend
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.x
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install wheel
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Setup configuration
-      env:
-        ORG_CODE: ${{ secrets.SSO_ORG_CODE }}
-        USERNAME: ${{ secrets.SSO_USERNAME }}
-        PASSWORD: ${{ secrets.SSO_PASSWORD }}
-      run: |
-        sed 's/[<>]//g' instance/config.template.cfg > instance/config.cfg
-        echo {\"${ORG_CODE}\": {\"username\": \"${USERNAME}\", \"password\": \"${PASSWORD}\"}} > scraper/credentials.json
-    - name: Quick test with pytest
-      run: |
-        pytest -m 'not sso'
-    - name: Slow Test with pytest (SSO UI related)
-      run: |
-        pytest -m 'sso' -rs
-    - name: Cleanup configuration
-      run: |
-        rm instance/config.cfg
-        rm scraper/credentials.json
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install wheel
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Setup configuration
+        env:
+          ORG_CODE: ${{ secrets.SSO_ORG_CODE }}
+          USERNAME: ${{ secrets.SSO_USERNAME }}
+          PASSWORD: ${{ secrets.SSO_PASSWORD }}
+        run: |
+          sed 's/[<>]//g' instance/config.template.cfg > instance/config.cfg
+          echo {\"${ORG_CODE}\": {\"username\": \"${USERNAME}\", \"password\": \"${PASSWORD}\"}} > scraper/credentials.json
+
+      - name: Run all tests with pytest and measure code coverage
+        shell: bash
+        run: |
+          coverage run --include="app/*,instance/*,models/*,scraper/*,sso/*,uploader/*" -m pytest
+          coverage xml -i
+
+      - name: Upload coverage.xml result
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: ./backend/coverage.xml
+
+      - name: Cleanup configuration
+        run: |
+          rm instance/config.cfg
+          rm scraper/credentials.json
+
+  sonarqube:
+    needs: build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+    steps:
+      - name: Download coverage result from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: coverage
+          path: ./backend/coverage.xml
+
+      # Use an existing action, you can look in the market place to find what you need and how to use it, to setup the sonar scanner
+      - name: Setup sonar scanner
+        uses: warchant/setup-sonar-scanner@v1
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
+
+      # Another existing action, this one to checkout the repository
+      - name: "Checkout repository on branch: ${{ github.REF }}"
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.REF }}
+          fetch-depth: 0
+
+      # Conditional execution can be done, in this case the parameter to use with sonar scanner are different if we are analyzing master or a branch
+      - if: endsWith(github.REF, '/master') != true
+        name: "Run an analysis of the ${{ github.REF }} branch"
+        env:
+          # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+        run: sonar-scanner
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+          -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }}
+          -Dsonar.projectKey=${{ secrets.SONARQUBE_PROJECT_KEY }}
+          -Dsonar.branch.name=${GITHUB_REF:11}
+          -Dsonar.scm.provider=git
+
+      - if: endsWith(github.REF, '/master') == true
+        name: "Run an analysis of the master branch"
+        env:
+          # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+        run: sonar-scanner
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+          -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }}
+          -Dsonar.projectKey=${{ secrets.SONARQUBE_PROJECT_KEY }}
+          -Dsonar.scm.provider=git
+          -Dsonar.java.binaries=/tmp
