@@ -1,12 +1,10 @@
-import React from "react";
-import styled, { css } from "styled-components";
-import { useSelector } from "react-redux";
+import React from 'react';
+import styled, { css } from 'styled-components';
+import { useSelector } from 'react-redux';
 
-const DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 
-const pad = val => {
-  return `0${val}`.substr(-2);
-};
+const pad = (val) => `0${val}`.substr(-2);
 
 function Schedule({
   startHour,
@@ -16,42 +14,40 @@ function Schedule({
   width,
   showLabel,
   showHeader,
-  showRoom
+  showRoom,
 }) {
-  const isMobile = useSelector(state => state.appState.isMobile);
+  const isMobile = useSelector((state) => state.appState.isMobile);
 
-  const rowToDisplay = minute => {
+  const rowToDisplay = (minute) => {
     const hour = Math.floor(minute / 60) + startHour;
     return `${pad(hour)}.${pad(minute % 60)}`;
   };
 
-  const displayToMinute = display => {
-    var [hour, minute] = display.split(".").map(part => parseInt(part, 10));
+  const displayToMinute = (display) => {
+    const [hour, minute] = display.split('.').map((part) => parseInt(part, 10));
     return (hour - startHour + 2) * 60 + minute - (showHeader ? 0 : 30);
   };
 
-  const minuteToRow = minute => {
-    return (minute + 1) * 60 - (showHeader ? 0 : 30);
-  };
+  const minuteToRow = (minute) => (minute + 1) * 60 - (showHeader ? 0 : 30);
 
-  const dayToColumn = day => DAYS.indexOf(day) + 1 + (showLabel ? 1 : 0);
+  const dayToColumn = (day) => DAYS.indexOf(day) + 1 + (showLabel ? 1 : 0);
 
   const TIME_MARKERS = Array(endHour - startHour + 1)
     .fill()
     .map((_, idx) => rowToDisplay(idx * 60));
   const renderHeader = () => (
-    <React.Fragment>
+    <>
       {showLabel && (
         <Header>
           <span>Jam</span>
         </Header>
       )}
-      {DAYS.map(day => (
+      {DAYS.map((day) => (
         <Header key={day}>
           <span>{day}</span>
         </Header>
       ))}
-    </React.Fragment>
+    </>
   );
 
   return (
@@ -60,14 +56,16 @@ function Schedule({
       {TIME_MARKERS.map((_, idx) => (
         <TimeMarker key={idx} row={minuteToRow(idx)} showLabel={showLabel} />
       ))}
-      {showLabel &&
-        TIME_MARKERS.map((marker, idx) => (
+      {showLabel
+        && TIME_MARKERS.map((marker, idx) => (
           <TimeLabel key={idx} row={minuteToRow(idx)}>
             {marker}
           </TimeLabel>
         ))}
-      {schedule &&
-        schedule.schedule_items.map(({ day, start, end, room, name }, idx) => (
+      {schedule
+        && schedule.schedule_items.map(({
+          day, start, end, room, name,
+        }, idx) => (
           <ScheduleItem
             key={`${schedule.name}-${idx}`}
             start={displayToMinute(start)}
@@ -75,12 +73,15 @@ function Schedule({
             day={dayToColumn(day)}
           >
             {!isMobile && (
-              <div className="header">
-                <span>
-                  {start} - {end}
-                </span>
-                {showRoom && <span className="room">{room}</span>}
-              </div>
+            <div className="header">
+              <span>
+                {start}
+                {' '}
+                -
+                {end}
+              </span>
+              {showRoom && <span className="room">{room}</span>}
+            </div>
             )}
             <div className="content">
               <span>{name}</span>
@@ -92,8 +93,8 @@ function Schedule({
   );
 }
 
-const getContainerWidth = ({ showLabel }) => (showLabel ? "90%" : "100%");
-const getFirstColumnWidth = ({ showLabel }) => (showLabel ? "auto" : "");
+const getContainerWidth = ({ showLabel }) => (showLabel ? '90%' : '100%');
+const getFirstColumnWidth = ({ showLabel }) => (showLabel ? 'auto' : '');
 
 const Container = styled.div`
   display: grid;
@@ -109,13 +110,13 @@ const Container = styled.div`
 const TimeLabel = styled.div`
   place-self: center;
   grid-area: ${({ row }) => row + 30} / 1 / ${({ row }) => row + 90} / 1;
-  font-size: ${props => (props.theme.mobile ? "12px" : "16px")};
+  font-size: ${(props) => (props.theme.mobile ? '12px' : '16px')};
   color: white;
 `;
 
 const TimeMarker = styled.div`
-  grid-area: ${({ row }) => row} / ${({ showLabel }) => (showLabel ? "2" : "1")} /
-    ${({ row }) => row + 60 + 1} / ${({ showLabel }) => (showLabel ? "8" : "7")};
+  grid-area: ${({ row }) => row} / ${({ showLabel }) => (showLabel ? '2' : '1')} /
+    ${({ row }) => row + 60 + 1} / ${({ showLabel }) => (showLabel ? '8' : '7')};
   border: 0.95px solid #4F4F4F;
   z-index: 0;
   padding-left: 30px;
@@ -132,7 +133,7 @@ const Header = styled.div`
   grid-row: 1 / 60;
   z-index: 2;
 
-  font-size: ${props => (props.theme.mobile ? "12px" : "16px")};
+  font-size: ${(props) => (props.theme.mobile ? '12px' : '16px')};
 `;
 
 const ScheduleItem = styled.div`
@@ -164,10 +165,9 @@ const ScheduleItem = styled.div`
 
   .content {
     padding: 2px 4px;
-    font-weight: ${({ mobile }) => (mobile ? "bold" : "bold")};
-    ${isMobile =>
-      isMobile &&
-      css`
+    font-weight: ${({ mobile }) => (mobile ? 'bold' : 'bold')};
+    ${(isMobile) => isMobile
+      && css`
         display: flex;
         flex-direction: column;
 
@@ -178,7 +178,7 @@ const ScheduleItem = styled.div`
         }
       `}
 
-    font-size: ${isMobile => (isMobile ? "14px" : "1rem")};
+    font-size: ${(isMobile) => (isMobile ? '14px' : '1rem')};
   }
 `;
 

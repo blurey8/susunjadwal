@@ -1,31 +1,50 @@
-import React from "react";
-import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
-import { addSchedule, removeSchedule } from "redux/modules/schedules";
+import React from 'react';
+import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { addSchedule, removeSchedule } from 'redux/modules/schedules';
 
-const CourseClassMobile = props => {
-  return (
-    <CouseClassMobileContainer onClick={props.handleChange}>
-      <h2>{props.name}</h2>
-      <h3>Pengajar</h3>
-      {props.lecturer.map(lecturer => (
-        <span key={lecturer}>- {lecturer}</span>
-      ))}
-      <h3>Jadwal</h3>
-      {props.schedule_items.map((item, idx) => (
-        <span key={idx}>
-          - {item.day}, {item.start}-{item.end} ({item.room})
-        </span>
-      ))}
-      <Radio active={props.isActive} />
-    </CouseClassMobileContainer>
-  );
-};
+const CourseClassMobile = (props) => (
+  <CouseClassMobileContainer onClick={props.handleChange}>
+    <h2>{props.name}</h2>
+    <h3>Pengajar</h3>
+    {props.lecturer.map((lecturer) => (
+      <span key={lecturer}>
+        -
+        {lecturer}
+      </span>
+    ))}
+    <h3>Jadwal</h3>
+    {props.schedule_items.map((item, idx) => (
+      <span key={idx}>
+        -
+        {' '}
+        {item.day}
+        ,
+        {' '}
+        {item.start}
+        -
+        {item.end}
+        {' '}
+        (
+        {item.room}
+        )
+      </span>
+    ))}
+    <Radio active={props.isActive} />
+  </CouseClassMobileContainer>
+);
 
-const CourseClassDesktop = props => {
+const CourseClassDesktop = (props) => {
   const classSchedules = props.schedule_items.map((item, idx) => (
     <span key={idx}>
-      - {item.day}, {item.start}-{item.end}
+      -
+      {' '}
+      {item.day}
+      ,
+      {' '}
+      {item.start}
+      -
+      {item.end}
     </span>
   ));
 
@@ -34,7 +53,10 @@ const CourseClassDesktop = props => {
   ));
 
   const lecturers = props.lecturer.map((lecturer, idx) => (
-    <span key={idx}>- {lecturer}</span>
+    <span key={idx}>
+      -
+      {lecturer}
+    </span>
   ));
 
   return (
@@ -52,8 +74,8 @@ const CourseClassDesktop = props => {
 
 function CourseClass({ course, courseClass }) {
   const key = `${course.name}-${courseClass.name}`;
-  const isActive = useSelector(state => state.courses[key]);
-  const isMobile = useSelector(state => state.appState.isMobile);
+  const isActive = useSelector((state) => state.courses[key]);
+  const isMobile = useSelector((state) => state.appState.isMobile);
   const dispatch = useDispatch();
 
   const handleChange = () => {
@@ -61,7 +83,7 @@ function CourseClass({ course, courseClass }) {
       ...courseClass,
       credit: course.credit,
       parentName: course.name,
-      term: course.term
+      term: course.term,
     };
 
     if (isActive) {
@@ -102,7 +124,7 @@ const Radio = styled.div`
   &:before {
     content: "";
     display: block;
-    background-color: ${({ active }) => (active ? "#F2994A" : "#0000")};
+    background-color: ${({ active }) => (active ? '#F2994A' : '#0000')};
     margin: 4px;
     width: 14px;
     height: 14px;

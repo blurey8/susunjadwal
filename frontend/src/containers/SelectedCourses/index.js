@@ -1,31 +1,29 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { withRouter } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { withRouter } from 'react-router';
+import { useSelector, useDispatch } from 'react-redux';
 
-import Button from "components/Button";
-import { postSaveSchedule } from "services/api";
-import { isScheduleConflict } from "./utils";
-import TrashIcon from "assets/Trash.png";
-import TrashWhiteIcon from "assets/TrashWhite.png";
-import Agenda from "./Agenda";
-import { setLoading } from "redux/modules/appState";
-import { removeSchedule, clearSchedule } from "redux/modules/schedules";
+import Button from 'components/Button';
+import { postSaveSchedule } from 'services/api';
+import TrashIcon from 'assets/Trash.png';
+import TrashWhiteIcon from 'assets/TrashWhite.png';
+import { setLoading } from 'redux/modules/appState';
+import { removeSchedule, clearSchedule } from 'redux/modules/schedules';
+import Agenda from './Agenda';
+import { isScheduleConflict } from './utils';
 
 function transformSchedules(schedules) {
   return schedules
-    .map(schedule =>
-      schedule.schedule_items.map(item => ({
-        ...item,
-        name: schedule.name
-      }))
-    )
+    .map((schedule) => schedule.schedule_items.map((item) => ({
+      ...item,
+      name: schedule.name,
+    })))
     .reduce((prev, now) => [...prev, ...now], []);
 }
 
 function SelectedCourses({ history }) {
-  const schedules = useSelector(state => state.schedules);
-  const auth = useSelector(state => state.auth);
+  const schedules = useSelector((state) => state.schedules);
+  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const [isAgendaModalVisible, setAgendaModalVisibility] = useState(false);
@@ -35,7 +33,7 @@ function SelectedCourses({ history }) {
     dispatch(setLoading(true));
     try {
       const {
-        data: { id: scheduleId }
+        data: { id: scheduleId },
       } = await postSaveSchedule(auth.userId, transformSchedules(schedules));
       dispatch(clearSchedule());
       history.push(`/jadwal/${scheduleId}`);
@@ -52,7 +50,14 @@ function SelectedCourses({ history }) {
 
     const classesTimes = schedule.schedule_items.map((item, index) => (
       <span key={index}>
-        - {item.day}, {item.start}-{item.end}
+        -
+        {' '}
+        {item.day}
+        ,
+        {' '}
+        {item.start}
+        -
+        {item.end}
       </span>
     ));
 
@@ -74,7 +79,7 @@ function SelectedCourses({ history }) {
   });
 
   return (
-    <React.Fragment>
+    <>
       <Agenda
         visible={isAgendaModalVisible}
         onClose={() => setAgendaModalVisibility(false)}
@@ -115,7 +120,7 @@ function SelectedCourses({ history }) {
           Simpan Jadwal
         </Button>
       </Container>
-    </React.Fragment>
+    </>
   );
 }
 
@@ -167,10 +172,10 @@ const TableContentRow = styled.div`
   font-size: 0.75rem;
   min-height: 70px;
   :nth-child(odd) {
-    background-color: ${({ inverted }) => (inverted ? "#C74550" : "#0000")};;
+    background-color: ${({ inverted }) => (inverted ? '#C74550' : '#0000')};;
   }
   :nth-child(even) {
-    background-color: ${({ inverted }) => (inverted ? "#C74550" : "#3C2E18")};;
+    background-color: ${({ inverted }) => (inverted ? '#C74550' : '#3C2E18')};;
   }
 
   div {

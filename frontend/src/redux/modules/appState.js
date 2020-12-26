@@ -1,9 +1,9 @@
-export const SET_LOADING = "SET_LOADING";
-export const SET_MOBILE = "SET_MOBILE";
+export const SET_LOADING = 'SET_LOADING';
+export const SET_MOBILE = 'SET_MOBILE';
 
 export const initialState = {
   loading: false,
-  isMobile: false
+  isMobile: false,
 };
 
 export default function reducer(state = initialState, { type, payload }) {
@@ -20,13 +20,13 @@ export default function reducer(state = initialState, { type, payload }) {
 export function setLoading(loading) {
   return {
     type: SET_LOADING,
-    payload: loading
+    payload: loading,
   };
 }
 
 export function setMobile(isMobile) {
   return {
     type: SET_MOBILE,
-    payload: isMobile
+    payload: isMobile,
   };
 }

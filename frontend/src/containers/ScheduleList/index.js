@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import Helmet from "react-helmet";
-import { Link } from "react-router-dom";
-import styled, { css } from "styled-components";
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import Helmet from 'react-helmet';
+import { Link } from 'react-router-dom';
+import styled, { css } from 'styled-components';
 
-import { CopyToClipboard } from "react-copy-to-clipboard";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import { getSchedules, deleteSchedule } from "services/api";
-import { setLoading } from "redux/modules/appState";
-import { makeAtLeastMs } from "utils/promise";
-import Schedule from "containers/ViewSchedule/Schedule";
-import clipboardImg from "assets/Clipboard.svg";
-import deleteImg from "assets/Delete.svg";
-import { decodeHtmlEntity } from 'utils/string'
+import { getSchedules, deleteSchedule } from 'services/api';
+import { setLoading } from 'redux/modules/appState';
+import { makeAtLeastMs } from 'utils/promise';
+import Schedule from 'containers/ViewSchedule/Schedule';
+import clipboardImg from 'assets/Clipboard.svg';
+import deleteImg from 'assets/Delete.svg';
+import { decodeHtmlEntity } from 'utils/string';
 
 function ScheduleList() {
-  const auth = useSelector(state => state.auth);
-  const isMobile = useSelector(state => state.appState.isMobile);
+  const auth = useSelector((state) => state.auth);
+  const isMobile = useSelector((state) => state.appState.isMobile);
 
   const dispatch = useDispatch();
 
@@ -26,7 +26,7 @@ function ScheduleList() {
     const fetchSchedules = async () => {
       dispatch(setLoading(true));
       const {
-        data: { user_schedules }
+        data: { user_schedules },
       } = await makeAtLeastMs(getSchedules(auth.userId), 1000);
       setSchedules(user_schedules);
       dispatch(setLoading(false));
@@ -39,14 +39,14 @@ function ScheduleList() {
     dispatch(setLoading(true));
     await makeAtLeastMs(deleteSchedule(userId, scheduleId), 1000);
     const {
-      data: { user_schedules }
+      data: { user_schedules },
     } = await makeAtLeastMs(getSchedules(auth.userId), 1000);
     setSchedules(user_schedules);
     dispatch(setLoading(false));
   }
 
   function confirmDeleteSchedule(scheduleId) {
-    const response = window.confirm("Apakah kamu yakin akan menghapusnya?");
+    const response = window.confirm('Apakah kamu yakin akan menghapusnya?');
     if (response) {
       performDeleteSchedule(auth.userId, scheduleId);
     }
@@ -54,15 +54,15 @@ function ScheduleList() {
 
   function showAlertCopy() {
     alert(
-      "Link telah disalin!! Kamu bisa bagikan link tersebut ke teman kamu."
+      'Link telah disalin!! Kamu bisa bagikan link tersebut ke teman kamu.',
     );
   }
 
   return (
-    <div style={{backgroundColor: "#1a1a1a"}}>
+    <div style={{ backgroundColor: '#1a1a1a' }}>
       <Helmet
         title="Daftar Jadwal"
-        meta={[{ name: "description", content: "Description of Jadwal" }]}
+        meta={[{ name: 'description', content: 'Description of Jadwal' }]}
       />
       <PageTitle mobile={isMobile}>Daftar Jadwal</PageTitle>
       {schedules && schedules.length > 0 ? (
@@ -71,7 +71,7 @@ function ScheduleList() {
             <Card key={`${schedule.name}-${idx}`}>
               <div className="header">
                 <Link to={`/jadwal/${schedule.id}`}>
-                  <h2>{decodeHtmlEntity(schedule.name) || "Untitled"}</h2>
+                  <h2>{decodeHtmlEntity(schedule.name) || 'Untitled'}</h2>
                 </Link>
                 <div>
                   <CopyToClipboard
@@ -108,13 +108,13 @@ const PageTitle = styled.h1`
   font-size: 1.5rem;
   font-weight: bold;
   color: white;
-  margin: ${({ mobile }) => (mobile ? "1rem" : "0")};
-  margin: ${({ mobile }) => (mobile ? "1rem" : "32px 48px 16px 48px")};
+  margin: ${({ mobile }) => (mobile ? '1rem' : '0')};
+  margin: ${({ mobile }) => (mobile ? '1rem' : '32px 48px 16px 48px')};
 `;
 
 const PageInfo = styled.h2`
   font-size: 1.1rem;
-  margin: ${({ mobile }) => (mobile ? "1rem" : "32px 48px 16px 48px")};
+  margin: ${({ mobile }) => (mobile ? '1rem' : '32px 48px 16px 48px')};
   color: white;
 `;
 
@@ -130,9 +130,8 @@ const Card = styled.div`
     flex-direction: row;
     justify-content: space-between;
   }
-  ${props =>
-    !props.theme.mobile &&
-    css`
+  ${(props) => !props.theme.mobile
+    && css`
       width: 49%;
       &:nth-child(even) {
         margin-left: 2%;
@@ -145,8 +144,8 @@ const CardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  flex-direction: ${props => (props.theme.mobile ? "column" : "row")};
-  padding: ${props => (props.theme.mobile ? "1rem" : "0 48px")};
+  flex-direction: ${(props) => (props.theme.mobile ? 'column' : 'row')};
+  padding: ${(props) => (props.theme.mobile ? '1rem' : '0 48px')};
   background-color: #1a1a1a;
 `;
 

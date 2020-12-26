@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { useSelector } from "react-redux";
-import { createGlobalStyle } from "styled-components";
-import { Link, NavLink } from "react-router-dom";
-import { slide as Menu } from "react-burger-menu";
+import React, { useState } from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
+import { useSelector } from 'react-redux';
 
-import "./styles.css";
+import { Link, NavLink } from 'react-router-dom';
+import { slide as Menu } from 'react-burger-menu';
+
+import './styles.css';
 
 const HideBodyOverflow = createGlobalStyle`
   body {
@@ -14,34 +14,34 @@ const HideBodyOverflow = createGlobalStyle`
 `;
 
 const LINKS = [
-  { to: "/susun", label: "Buat Jadwal" },
-  { to: "/jadwal", label: "Daftar Jadwal" },
-  { to: "/logout", label: "Logout" }
+  { to: '/susun', label: 'Buat Jadwal' },
+  { to: '/jadwal', label: 'Daftar Jadwal' },
+  { to: '/logout', label: 'Logout' },
 ];
 
 function renderHeaderLink() {
   return (
-    <React.Fragment>
+    <>
       {LINKS.map(({ to, label }) => (
         <HeaderLink key={to} to={to}>
           {label}
         </HeaderLink>
       )).reverse()}
-    </React.Fragment>
+    </>
   );
 }
 
 function Header() {
-  const isMobile = useSelector(state => state.appState.isMobile);
+  const isMobile = useSelector((state) => state.appState.isMobile);
   const [isOpened, setOpen] = useState(false);
-  const auth = useSelector(state => state.auth);
+  const auth = useSelector((state) => state.auth);
 
   function toggleMenu() {
     setOpen(!isOpened);
   }
 
   // JSX code for menu and the checking for isMobile are included to a variable named menuPage
-  
+
   const menuPage = isMobile ? (
     <Menu
       isOpen={isOpened}
@@ -50,11 +50,11 @@ function Header() {
       onStateChange={({ isOpen }) => setOpen(isOpen)}
       styles={{
         bmMenuWrap: {
-          height: "calc(100vh - 64px)"
+          height: 'calc(100vh - 64px)',
         },
         bmItemList: {
-          height: "none"
-        }
+          height: 'none',
+        },
       }}
     >
       {isOpened && <HideBodyOverflow />}
@@ -72,7 +72,8 @@ function Header() {
     <Container>
       <LogoLink to="/">
         <h1>
-          Susun<span>Jadwal</span>
+          Susun
+          <span>Jadwal</span>
         </h1>
       </LogoLink>
       {auth ? menuPage : null}
@@ -120,7 +121,7 @@ const HeaderLink = styled(NavLink)`
 
 const LogoLink = styled(Link)`
   h1 {
-    margin: 0 0 0 ${props => (props.theme.mobile ? "1rem" : "3rem")};
+    margin: 0 0 0 ${(props) => (props.theme.mobile ? '1rem' : '3rem')};
     line-height: 3rem;
     font-size: 2rem;
     font-weight: 700;

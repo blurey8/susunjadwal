@@ -2,11 +2,7 @@
 name: Analyze branch
 
 # then define on which event, here a push
-on:
-  push:
-  # and the target with some regex to match our specific  branch names
-    branches:
-      - lutfi/setup_sonarqube
+on: [push]
 
 # We can now build our job
 jobs:
@@ -34,6 +30,7 @@ jobs:
         env:
           # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
         run: sonar-scanner
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
           -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }}
@@ -46,6 +43,7 @@ jobs:
         env:
           # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
         run: sonar-scanner
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
           -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }}
