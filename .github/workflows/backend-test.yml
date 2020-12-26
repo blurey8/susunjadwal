@@ -41,8 +41,7 @@ jobs:
       run: |
         rm instance/config.cfg
         rm scraper/credentials.json
-    steps:
-      - uses: actions/upload-artifact@v2
-        with:
-          name: coverage.xml
-          path: ./coverage.xml
+    - uses: actions/upload-artifact@v2
+      with:
+        name: coverage.xml
+        path: ./coverage.xml
