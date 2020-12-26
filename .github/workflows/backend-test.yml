@@ -27,12 +27,18 @@ jobs:
       run: |
         sed 's/[<>]//g' instance/config.template.cfg > instance/config.cfg
         echo {\"${ORG_CODE}\": {\"username\": \"${USERNAME}\", \"password\": \"${PASSWORD}\"}} > scraper/credentials.json
-    - name: Quick test with pytest
+    - name: Quick test with pytest and measure code coverage
+      env:
+        DIRECTORIES: "app/*,instance/*,models/*,scraper/*,uploader/*"
       run: |
-        pytest -m 'not sso'
+        coverage run --include=${{ DIRECTORIES }} -m pytest --ignore="app/tests/test_auth.py"
     - name: Slow Test with pytest (SSO UI related)
       run: |
-        pytest -m 'sso' -rs
+        coverage run --include="sso/*" --append -m pytest -rs
+    - name: Combine and generate coverage data
+      run: /
+        coverage combine
+        coverage xml
     - name: Cleanup configuration
       run: |
         rm instance/config.cfg
