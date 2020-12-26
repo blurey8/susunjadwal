@@ -10,15 +10,18 @@ jobs:
         working-directory: ./backend
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up Python 3.x
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: "3.x"
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install wheel
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
       - name: Setup configuration
         env:
           ORG_CODE: ${{ secrets.SSO_ORG_CODE }}
@@ -27,23 +30,19 @@ jobs:
         run: |
           sed 's/[<>]//g' instance/config.template.cfg > instance/config.cfg
           echo {\"${ORG_CODE}\": {\"username\": \"${USERNAME}\", \"password\": \"${PASSWORD}\"}} > scraper/credentials.json
-      # - name: Quick test with pytest and measure code coverage
-      #   run: |
-      #     coverage run --include="app/*,instance/*,models/*,scraper/*,uploader/*" -m pytest --ignore="app/tests/test_auth.py"
-      # - name: Slow Test with pytest (SSO UI related)
-      #   run: |
-      #     coverage run --include="sso/*" --append -m pytest -rs
+
       - name: Run all tests with pytest and measure code coverage
         shell: bash
         run: |
           coverage run --include="app/*,instance/*,models/*,scraper/*,sso/*,uploader/*" -m pytest
           coverage xml -i
-          cat coverage.xml
+
       - name: Upload coverage.xml result
         uses: actions/upload-artifact@v2
         with:
           name: coverage
           path: ./backend/coverage.xml
+
       - name: Cleanup configuration
         run: |
           rm instance/config.cfg
@@ -66,10 +65,10 @@ jobs:
       - name: Setup sonar scanner
         uses: warchant/setup-sonar-scanner@v1
         env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
 
       # Another existing action, this one to checkout the repository
-      - name: 'Checkout repository on branch: ${{ github.REF }}'
+      - name: "Checkout repository on branch: ${{ github.REF }}"
         uses: actions/checkout@v2
         with:
           ref: ${{ github.REF }}
@@ -77,7 +76,7 @@ jobs:
 
       # Conditional execution can be done, in this case the parameter to use with sonar scanner are different if we are analyzing master or a branch
       - if: endsWith(github.REF, '/master') != true
-        name: 'Run an analysis of the ${{ github.REF }} branch'
+        name: "Run an analysis of the ${{ github.REF }} branch"
         env:
           # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -90,7 +89,7 @@ jobs:
           -Dsonar.scm.provider=git
 
       - if: endsWith(github.REF, '/master') == true
-        name: 'Run an analysis of the master branch'
+        name: "Run an analysis of the master branch"
         env:
           # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
