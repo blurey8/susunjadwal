@@ -43,6 +43,7 @@ jobs:
         rm scraper/credentials.json
 
   sonarqube:
+    runs-on: ubuntu-latest
     steps:
       # Use an existing action, you can look in the market place to find what you need and how to use it, to setup the sonar scanner
       - name: Setup sonar scanner
