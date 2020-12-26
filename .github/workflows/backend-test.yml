@@ -86,7 +86,7 @@ jobs:
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
           -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }}
           -Dsonar.projectKey=${{ secrets.SONARQUBE_PROJECT_KEY }}
-          -Dsonar.branch.name=${{GITHUB_REF:11}}
+          -Dsonar.branch.name=${GITHUB_REF:11}
           -Dsonar.scm.provider=git
 
       - if: endsWith(github.REF, '/master') == true
