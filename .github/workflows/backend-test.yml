@@ -43,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: coverage
-          path: ./coverage.xml
+          path: ./backend/coverage.xml
       - name: Cleanup configuration
         run: |
           rm instance/config.cfg
