@@ -41,20 +41,23 @@ jobs:
       run: |
         rm instance/config.cfg
         rm scraper/credentials.json
-    - name: Setup sonar scanner
-      uses: warchant/setup-sonar-scanner@v1
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-    - name: 'Send data to SonarQube'
-      env:
-        # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-      run: |
-        cd ..
-        sonar-scanner
-          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
-          -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }}
-          -Dsonar.projectKey=${{ secrets.SONARQUBE_PROJECT_KEY }}
-          -Dsonar.branch.name=${{ github.REF }}
-          -Dsonar.scm.provider=git
+
+  sonarqube:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Setup sonar scanner
+        uses: warchant/setup-sonar-scanner@v1
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      - name: 'Send data to SonarQube'
+        env:
+          # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+        run: |
+          sonar-scanner
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+            -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }}
+            -Dsonar.projectKey=${{ secrets.SONARQUBE_PROJECT_KEY }}
+            -Dsonar.branch.name=${{ github.REF }}
+            -Dsonar.scm.provider=git
