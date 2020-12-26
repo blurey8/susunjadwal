@@ -28,10 +28,8 @@ jobs:
         sed 's/[<>]//g' instance/config.template.cfg > instance/config.cfg
         echo {\"${ORG_CODE}\": {\"username\": \"${USERNAME}\", \"password\": \"${PASSWORD}\"}} > scraper/credentials.json
     - name: Quick test with pytest and measure code coverage
-      env:
-        DIRECTORIES: "app/*,instance/*,models/*,scraper/*,uploader/*"
       run: |
-        coverage run --include=${{ DIRECTORIES }} -m pytest --ignore="app/tests/test_auth.py"
+        coverage run --include="app/*,instance/*,models/*,scraper/*,uploader/*" -m pytest --ignore="app/tests/test_auth.py"
     - name: Slow Test with pytest (SSO UI related)
       run: |
         coverage run --include="sso/*" --append -m pytest -rs
