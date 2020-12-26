@@ -9,7 +9,6 @@ jobs:
       run:
         working-directory: ./backend
     steps:
-      - shell: bash
       - uses: actions/checkout@v2
       - name: Set up Python 3.x
         uses: actions/setup-python@v2
@@ -51,8 +50,10 @@ jobs:
   sonarqube:
     needs: build
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
     steps:
-      - shell: bash
       - name: Download coverage result from build job
         uses: actions/download-artifact@v2
         with:
