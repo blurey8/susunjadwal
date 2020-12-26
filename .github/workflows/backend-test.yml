@@ -34,14 +34,16 @@ jobs:
       #   run: |
       #     coverage run --include="sso/*" --append -m pytest -rs
       - name: Run all tests with pytest and measure code coverage
+        shell: bash
         run: |
           coverage run --include="app/*,instance/*,models/*,scraper/*,sso/*,uploader/*" -m pytest
           coverage xml -i
+          cat coverage.xml
       - name: Upload coverage.xml result
         uses: actions/upload-artifact@v2
         with:
           name: coverage
-          path: coverage.xml
+          path: ./coverage.xml
       - name: Cleanup configuration
         run: |
           rm instance/config.cfg
