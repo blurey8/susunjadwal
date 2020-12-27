@@ -10,61 +10,73 @@ class TestCourse:
     This test class use auth_client fixture. See conftest.py for more info."""
 
     COURSE = {
-        'name': 'Analisis Numerik',
-        'credit': 3,
-        'term': 6,
+        "name": "Analisis Numerik",
+        "credit": 3,
+        "term": 6,
     }
 
-    def test_get_courses(self, auth_client):
+    def test_get_courses_with_period(self, auth_client):
         client, user = auth_client
-        self.create_period(user.major.id)
+        self.create_period(major_id=user.major.id, is_detail=True)
 
-        url = '{}/majors/{}/courses'.format(BASE_PATH, user.major.id)
+        url = "{}/majors/{}/courses".format(BASE_PATH, user.major.id)
         res = client.get(url)
 
         assert res.status_code == 200
         res_json = res.get_json()
-        assert res_json['is_detail']
-        assert res_json['name'] == app.config["ACTIVE_PERIOD"]
+        assert res_json["is_detail"]
+        assert res_json["name"] == app.config["ACTIVE_PERIOD"]
 
-        assert len(res_json['courses']) == 1
-        course_data = res_json['courses'][0]
-        assert course_data['name'] == self.COURSE['name']
-        assert course_data['credit'] == self.COURSE['credit']
-        assert course_data['term'] == self.COURSE['term']
+        assert len(res_json["courses"]) == 1
+        course_data = res_json["courses"][0]
+        assert course_data["name"] == self.COURSE["name"]
+        assert course_data["credit"] == self.COURSE["credit"]
+        assert course_data["term"] == self.COURSE["term"]
 
-        assert len(course_data['classes']) == 1
-        class_data = course_data['classes'][0]
-        assert len(class_data['lecturer']) == 2
-        assert len(class_data['schedule_items']) == 1
+        assert len(course_data["classes"]) == 1
+        class_data = course_data["classes"][0]
+        assert len(class_data["lecturer"]) == 2
+        assert len(class_data["schedule_items"]) == 1
 
-    def create_period(self, major_id):
+    def test_get_courses_without_period(self, auth_client):
+        client, user = auth_client
+        self.create_period(major_id=user.major.id, is_detail=False)
+
+        url = "{}/majors/{}/courses".format(BASE_PATH, user.major.id)
+        res = client.get(url)
+
+        assert res.status_code == 200
+        res_json = res.get_json()
+        assert not res_json["is_detail"]
+        assert res_json["name"] == app.config["ACTIVE_PERIOD"]
+
+    def create_period(self, major_id, is_detail):
         """Create dummy period with its course and class"""
 
         class_obj = Class(
-            name='Anum - A',
+            name="Anum - A",
             schedule_items=[
                 ScheduleItem(
-                    day='Senin',
-                    start='09.40',
-                    end='08.00',
-                    room='A6.09 (Ged Baru)',
+                    day="Senin",
+                    start="09.40",
+                    end="08.00",
+                    room="A6.09 (Ged Baru)",
                 ),
             ],
-            lecturer=['Nama Dosen 1', 'Nama Dosen 2'],
+            lecturer=["Nama Dosen 1", "Nama Dosen 2"],
         )
 
         course = Course(
-            name=self.COURSE['name'],
-            credit=self.COURSE['credit'],
-            term=self.COURSE['term'],
+            name=self.COURSE["name"],
+            credit=self.COURSE["credit"],
+            term=self.COURSE["term"],
             classes=[class_obj],
         )
 
         period = Period.objects().create(
             major_id=major_id,
             name=app.config["ACTIVE_PERIOD"],
-            is_detail=True,
+            is_detail=is_detail,
             courses=[course],
         )
 
@@ -82,50 +94,49 @@ class TestSchedule:
             "end": "09.40",
             "room": "A6.09 (Ged Baru)",
             "start": "08.00",
-            "name": "Anum - A"
+            "name": "Anum - A",
         },
         {
             "day": "Rabu",
             "end": "08.50",
             "room": "A6.09 (Ged Baru)",
             "start": "08.00",
-            "name": "Anum - A"
+            "name": "Anum - A",
         },
         {
             "day": "Selasa",
             "end": "09.40",
             "room": "2.2304",
             "start": "08.00",
-            "name": "Basis Data - A"
+            "name": "Basis Data - A",
         },
         {
             "day": "Kamis",
             "end": "09.40",
             "room": "2.2404",
             "start": "08.00",
-            "name": "Basis Data - A"
+            "name": "Basis Data - A",
         },
     ]
 
     def test_get_empty_user_schedules(self, auth_client):
         client, user = auth_client
-        url = '{}/users/{}/user_schedules'.format(BASE_PATH, user.id)
+        url = "{}/users/{}/user_schedules".format(BASE_PATH, user.id)
         res = client.get(url)
 
         assert res.status_code == 200
-        assert res.get_json()['user_schedules'] == []
+        assert res.get_json()["user_schedules"] == []
 
         user_schedules = UserSchedule.objects(user_id=user.id).all()
         assert len(user_schedules) == 0
 
     def test_save_user_schedule(self, auth_client):
         client, user = auth_client
-        url = '{}/users/{}/user_schedule'.format(BASE_PATH, user.id)
-        res = client.post(url, json={
-            'schedule_items': self.schedule_items})
+        url = "{}/users/{}/user_schedule".format(BASE_PATH, user.id)
+        res = client.post(url, json={"schedule_items": self.schedule_items})
 
         assert res.status_code == 201
-        assert res.get_json()['id']
+        assert res.get_json()["id"]
 
         user_schedules = UserSchedule.objects(user_id=user.id).all()
         assert len(user_schedules) == 1
@@ -142,45 +153,46 @@ class TestSchedule:
         client, user = auth_client
         user_schedule = self.create_user_schedule(user)
 
-        url = '{}/users/{}/user_schedules'.format(BASE_PATH, user.id)
+        url = "{}/users/{}/user_schedules".format(BASE_PATH, user.id)
         res = client.get(url)
 
         assert res.status_code == 200
-        res_json = res.get_json()['user_schedules']
+        res_json = res.get_json()["user_schedules"]
         assert len(res_json) == 1
-        assert res_json[0]['id'] == str(user_schedule.id)
-        assert res_json[0]['schedule_items'] == self.schedule_items
+        assert res_json[0]["id"] == str(user_schedule.id)
+        assert res_json[0]["schedule_items"] == self.schedule_items
 
     def test_get_saved_user_schedule_detail(self, auth_client):
         client, user = auth_client
         user_schedule = self.create_user_schedule(user)
 
-        url = '{}/user_schedules/{}'.format(BASE_PATH, user_schedule.id)
+        url = "{}/user_schedules/{}".format(BASE_PATH, user_schedule.id)
         res = client.get(url)
 
         assert res.status_code == 200
-        res_json = res.get_json()['user_schedule']
-        assert res_json['id'] == str(user_schedule.id)
-        assert res_json['created_at']
-        assert res_json['has_edit_access'] is True
-        assert res_json['name'] is None
-        assert res_json['schedule_items'] == self.schedule_items
+        res_json = res.get_json()["user_schedule"]
+        assert res_json["id"] == str(user_schedule.id)
+        assert res_json["created_at"]
+        assert res_json["has_edit_access"] is True
+        assert res_json["name"] is None
+        assert res_json["schedule_items"] == self.schedule_items
 
     def test_rename_user_schedule(self, auth_client):
         client, user = auth_client
         user_schedule = self.create_user_schedule(user)
 
-        url = '{}/users/{}/user_schedules/{}/change_name'.format(
-            BASE_PATH, user.id, user_schedule.id)
-        SCHEDULE_NAME = 'Testing Schedule'
-        res = client.post(url, json={'name': SCHEDULE_NAME})
+        url = "{}/users/{}/user_schedules/{}/change_name".format(
+            BASE_PATH, user.id, user_schedule.id
+        )
+        SCHEDULE_NAME = "Testing Schedule"
+        res = client.post(url, json={"name": SCHEDULE_NAME})
 
         assert res.status_code == 200
-        res_json = res.get_json()['user_schedule']
-        assert res_json['created_at']
-        assert res_json['id'] == str(user_schedule.id)
-        assert res_json['name'] == SCHEDULE_NAME
-        assert res_json['schedule_items'] == self.schedule_items
+        res_json = res.get_json()["user_schedule"]
+        assert res_json["created_at"]
+        assert res_json["id"] == str(user_schedule.id)
+        assert res_json["name"] == SCHEDULE_NAME
+        assert res_json["schedule_items"] == self.schedule_items
 
         user_schedule.reload()
         assert user_schedule.name == SCHEDULE_NAME
@@ -189,8 +201,9 @@ class TestSchedule:
         client, user = auth_client
         user_schedule = self.create_user_schedule(user)
 
-        url = '{}/users/{}/user_schedules/{}'.format(
-            BASE_PATH, user.id, user_schedule.id)
+        url = "{}/users/{}/user_schedules/{}".format(
+            BASE_PATH, user.id, user_schedule.id
+        )
         res = client.delete(url)
 
         assert res.status_code == 204
