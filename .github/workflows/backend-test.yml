@@ -34,7 +34,7 @@ jobs:
       - name: Check code style
         shell: bash
         run: |
-          pycodestyle ./backend --exclude=env --count
+          pycodestyle backend/ --exclude=env,__pycache__,.*cache --count
 
       - name: Run all tests with pytest and measure code coverage
         shell: bash
