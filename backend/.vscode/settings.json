@@ -1,0 +1,12 @@
+{
+    "python.pythonPath": "env/bin/python",
+    "python.linting.pycodestyleEnabled": true,
+    "python.linting.enabled": true,
+    "python.linting.lintOnSave": true,
+    "python.linting.ignorePatterns": [
+        ".vscode/*.py",
+        "**/site-packages/**/*.py",
+        "env/**/*"
+    ],
+    "python.testing.pytestEnabled": true,
+}
