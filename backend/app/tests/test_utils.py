@@ -1,6 +1,6 @@
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
-from app.utils import generate_token, extract_header_data
+from app.utils import generate_token, extract_header_data, get_user_id
 from app.jwt_utils import decode_token, encode_token
 
 
@@ -77,3 +77,47 @@ class TestExtractHeaderData:
         extracted_header_data = extract_header_data(header)
 
         assert extracted_header_data is None
+
+
+class TestGetUserId:
+    @patch("app.jwt_utils.app")
+    def test_given_extracted_header_data_with_user_id_should_return_user_id(
+        self, mock_app
+    ):
+        mock_app.config = {"SECRET_KEY": "secret"}
+        data = {"user_id": "testuserid"}
+        token = encode_token(data)
+        header = {"Authorization": f"JWT {token}"}
+        mock_request = MagicMock()
+        mock_request.headers = header
+
+        user_id = get_user_id(mock_request)
+
+        assert user_id is not None
+        assert user_id == data["user_id"]
+
+    @patch("app.jwt_utils.app")
+    def test_given_extracted_header_data_without_user_id_should_return_none(
+        self, mock_app
+    ):
+        mock_app.config = {"SECRET_KEY": "secret"}
+        data = {"some_data": "testuserid"}
+        token = encode_token(data)
+        header = {"Authorization": f"JWT {token}"}
+        mock_request = MagicMock()
+        mock_request.headers = header
+
+        user_id = get_user_id(mock_request)
+
+        assert user_id is None
+
+    @patch("app.jwt_utils.app")
+    def test_given_invalid_request_header_should_return_none(self, mock_app):
+        mock_app.config = {"SECRET_KEY": "secret"}
+        header = {"Authorization": f"JWT invalid-token"}
+        mock_request = MagicMock()
+        mock_request.headers = header
+
+        user_id = get_user_id(mock_request)
+
+        assert user_id is None
