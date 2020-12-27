@@ -45,9 +45,9 @@ jobs:
         run: |
           rm instance/config.cfg
           rm scraper/credentials.json
-          
+
   sonarqube:
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     defaults:
       run:
