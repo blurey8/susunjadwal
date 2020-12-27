@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from flask import Flask
 
 from app.jwt_utils import encode_token, decode_token
 
@@ -8,28 +8,31 @@ class TestJWTUtils:
     def setup_class(cls):
         cls.data = {"data_1": "confidential", "data_2": 123456}
 
-    @patch("app.jwt_utils.app")
-    def test_encode_token_should_produce_jwt_token(self, mock_app):
-        mock_app.config = {"SECRET_KEY": "jwt-secret"}
+    def test_encode_token_should_produce_jwt_token(self):
+        app = Flask(__name__)
+        app.config.update(SECRET_KEY="jwt-secret")
 
-        encoded_token = encode_token(self.data)
+        with app.test_request_context():
+            encoded_token = encode_token(self.data)
 
-        assert encoded_token is not None
-        assert type(encoded_token) == str
+            assert encoded_token is not None
+            assert type(encoded_token) == str
 
-    @patch("app.jwt_utils.app")
-    def test_decode_valid_token_should_return_the_decoded_data(self, mock_app):
-        mock_app.config = {"SECRET_KEY": "jwt-secret"}
-        encoded_token = encode_token(self.data)
+    def test_decode_valid_token_should_return_the_decoded_data(self):
+        app = Flask(__name__)
+        app.config.update(SECRET_KEY="jwt-secret")
 
-        decoded_data = decode_token(encoded_token)
+        with app.test_request_context():
+            encoded_token = encode_token(self.data)
 
-        assert decoded_data is not None
-        assert decoded_data == self.data
+            decoded_data = decode_token(encoded_token)
 
-    @patch("app.jwt_utils.app")
-    def test_decode_invalid_token_should_return_none_type(self, mock_app):
-        mock_app.config = {"SECRET_KEY": "jwt-secret"}
+            assert decoded_data is not None
+            assert decoded_data == self.data
+
+    def test_decode_invalid_token_should_return_none_type(self):
+        app = Flask(__name__)
+        app.config.update(SECRET_KEY="jwt-secret")
 
         invalid_tokens = [
             "",
@@ -53,6 +56,7 @@ class TestJWTUtils:
             None,
         ]
 
-        for token in invalid_tokens:
-            decoded_data = decode_token(token)
-            assert decoded_data is None
+        with app.test_request_context():
+            for token in invalid_tokens:
+                decoded_data = decode_token(token)
+                assert decoded_data is None
