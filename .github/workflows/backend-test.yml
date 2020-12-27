@@ -31,6 +31,11 @@ jobs:
           sed 's/[<>]//g' instance/config.template.cfg > instance/config.cfg
           echo {\"${ORG_CODE}\": {\"username\": \"${USERNAME}\", \"password\": \"${PASSWORD}\"}} > scraper/credentials.json
 
+      - name: Check code style
+        shell: bash
+        run: |
+          pycodestyle ./backend --exclude=env --count
+
       - name: Run all tests with pytest and measure code coverage
         shell: bash
         run: |
