@@ -35,13 +35,13 @@ jobs:
         shell: bash
         run: |
           coverage run --include="app/*,instance/*,models/*,scraper/*,sso/*,uploader/*" -m pytest
-          coverage xml -i
+          coverage xml -i -o coverage-reports/coverage.xml
 
       - name: Upload coverage.xml result
         uses: actions/upload-artifact@v2
         with:
           name: coverage
-          path: ./backend/coverage.xml
+          path: ./backend/coverage-reports/coverage.xml
 
       - name: Cleanup configuration
         run: |
@@ -59,7 +59,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: coverage
-          path: ./backend/coverage.xml
+          path: ./backend/coverage-reports/coverage.xml
 
       # Use an existing action, you can look in the market place to find what you need and how to use it, to setup the sonar scanner
       - name: Setup sonar scanner
