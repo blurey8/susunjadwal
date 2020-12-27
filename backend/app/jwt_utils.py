@@ -10,7 +10,7 @@ def encode_token(data):
 def decode_token(token):
     try:
         data = jwt.decode(token, app.config["SECRET_KEY"], algorithm='HS256')
-    except:
+    except Exception:
         return None
 
     return data

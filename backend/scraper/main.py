@@ -79,7 +79,7 @@ def get_period_and_kd_org(html):
 
         return period, kd_org
 
-    except:
+    except Exception:
         pass
 
     return None, None
