@@ -121,7 +121,7 @@ def create_courses(html, is_detail=False):
                 lecturers = str(sib.contents[13]).split('<br/>')
                 lecturers[0] = lecturers[0].replace('<td>', '')
                 lecturers[-1] = lecturers[-1].replace('</td>', '')
-                lecturers = [l.lstrip('-') for l in lecturers]
+                lecturers = [lecturer.lstrip('-') for lecturer in lecturers]
 
                 result = []
                 schedules = zip(schedules, rooms)
