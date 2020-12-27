@@ -101,7 +101,7 @@ def create_courses(html, is_detail=False):
 
         classes = []
         for sib in class_.parent.find_next_siblings('tr'):
-            if (sib.get('class') == None):
+            if (sib.get('class') is None):
                 break
 
             class_name = sib.a.text
