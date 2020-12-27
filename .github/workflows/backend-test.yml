@@ -3,7 +3,7 @@ name: Backend Test
 on: [push]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -14,14 +14,13 @@ jobs:
       - name: Set up Python 3.x
         uses: actions/setup-python@v2
         with:
-          python-version: "3.x"
+          python-version: "3.7"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install wheel
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
       - name: Setup configuration
         env:
           ORG_CODE: ${{ secrets.SSO_ORG_CODE }}
@@ -30,24 +29,23 @@ jobs:
         run: |
           sed 's/[<>]//g' instance/config.template.cfg > instance/config.cfg
           echo {\"${ORG_CODE}\": {\"username\": \"${USERNAME}\", \"password\": \"${PASSWORD}\"}} > scraper/credentials.json
-
       - name: Run all tests with pytest and measure code coverage
         shell: bash
         run: |
           coverage run --include="app/*,instance/*,models/*,scraper/*,sso/*,uploader/*" -m pytest
-          coverage xml -i
-
+          coverage report -m
+          coverage xml -i -o coverage-reports/coverage.xml
       - name: Upload coverage.xml result
         uses: actions/upload-artifact@v2
         with:
           name: coverage
-          path: ./backend/coverage.xml
+          path: ./backend/coverage-reports/coverage.xml
 
       - name: Cleanup configuration
         run: |
           rm instance/config.cfg
           rm scraper/credentials.json
-
+          
   sonarqube:
     needs: build
     runs-on: ubuntu-latest
@@ -59,7 +57,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: coverage
-          path: ./backend/coverage.xml
+          path: ./backend/coverage-reports/coverage.xml
 
       # Use an existing action, you can look in the market place to find what you need and how to use it, to setup the sonar scanner
       - name: Setup sonar scanner
