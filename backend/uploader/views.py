@@ -49,7 +49,8 @@ def auth():
         client = get_cas_client(service_url)
         sso_profile = authenticate(ticket, client)
 
-        if (sso_profile is not None) and check_uploader(sso_profile["attributes"]["npm"]):
+        if ((sso_profile is not None)
+                and check_uploader(sso_profile["attributes"]["npm"])):
             token = generate_token(sso_profile)
             r = make_response(
                 redirect(url_for_custom("router_uploader.upload")))
@@ -91,7 +92,8 @@ def upload(profile):
             period, kd_org = get_period_and_kd_org(html)
             role = check_uploader(profile["npm"])
 
-            if (period == app.config["ACTIVE_PERIOD"]) and (kd_org == profile["kd_org"] or role == "admin"):
+            if ((period == app.config["ACTIVE_PERIOD"])
+                    and (kd_org == profile["kd_org"] or role == "admin")):
                 courses = create_courses(html, is_detail=True)
                 if not courses:
                     flash("Error, hubungi admin. Sertakan file ini.")
@@ -120,7 +122,8 @@ def upload(profile):
                 instance.save()
 
                 timestamp = int(time.time())
-                filename = f"{kd_org}_{timestamp}_{secure_filename(file_.filename)}"
+                filename = \
+                    f"{kd_org}_{timestamp}_{secure_filename(file_.filename)}"
                 file_.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
 
             else:

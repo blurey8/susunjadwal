@@ -11,7 +11,8 @@ class TestUser(TestBase):
     def test_user_creation(self):
         major = Major.objects().create(name="Test_Name", kd_org="Test_KD_ORG")
         User.objects().create(
-            name="John", username="wick", npm="12345678", batch="2020", major=major
+            name="John", username="wick", npm="12345678",
+            batch="2020", major=major
         )
 
         users = User.objects
@@ -28,16 +29,19 @@ class TestUser(TestBase):
         major.delete()
 
     def test_user_update(self):
-        old_major = Major.objects().create(name="Test_Name", kd_org="Test_KD_ORG")
+        old_major = Major.objects().create(
+            name="Test_Name", kd_org="Test_KD_ORG")
         user = User.objects().create(
-            name="John", username="wick", npm="12345678", batch="2020", major=old_major
+            name="John", username="wick", npm="12345678",
+            batch="2020", major=old_major
         )
 
         user.name = "Smith"
         user.username = "wock"
         user.npm = "0123"
         user.batch = "123"
-        new_major = Major.objects().create(name="New_Major", kd_org="New_KD_ORG")
+        new_major = Major.objects().create(
+            name="New_Major", kd_org="New_KD_ORG")
         user.major = new_major
         user.save()
         user.reload()
@@ -58,7 +62,8 @@ class TestUser(TestBase):
             username="wick",
             npm="12345678",
             batch="2020",
-            major=Major.objects().create(name="Test_Name", kd_org="Test_KD_ORG"),
+            major=Major.objects().create(
+                name="Test_Name", kd_org="Test_KD_ORG"),
         )
 
         assert len(User.objects) == 1

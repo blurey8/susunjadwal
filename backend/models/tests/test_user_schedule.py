@@ -119,7 +119,8 @@ class TestUserSchedule(TestBase):
         assert len(user_schedule.schedule_items) == 0
 
         inserted_schedule = user_schedule.add_schedule_item(
-            name="Schedule A", day="Day A", room="Room A", start="Start", end="End"
+            name="Schedule A", day="Day A", room="Room A",
+            start="Start", end="End"
         )
 
         assert len(user_schedule.schedule_items) == 1
@@ -230,7 +231,8 @@ class TestUserSchedule(TestBase):
         assert serialized_user_schedule["name"] == user_schedule.name
         assert len(serialized_user_schedule["schedule_items"]) == 1
         assert (
-            serialized_user_schedule["schedule_items"][0] == schedule_item.serialize()
+            serialized_user_schedule["schedule_items"][0]
+            == schedule_item.serialize()
         )
 
     def test_user_schedule_fields_validation(self):

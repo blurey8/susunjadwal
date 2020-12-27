@@ -74,7 +74,9 @@ def get_user_schedule_list(user_id):
     }), 200)
 
 
-@router_main.route('/users/<user_id>/user_schedules/<user_schedule_id>', methods=['DELETE'])
+@router_main.route(
+    '/users/<user_id>/user_schedules/<user_schedule_id>',
+    methods=['DELETE'])
 @require_jwt_token
 @require_same_user_id
 def delete_user_schedule(user_id, user_schedule_id):
@@ -84,7 +86,9 @@ def delete_user_schedule(user_id, user_schedule_id):
     return (jsonify(), 204)
 
 
-@router_main.route('/users/<user_id>/user_schedules/<user_schedule_id>/change_name', methods=['POST'])
+@router_main.route(
+    '/users/<user_id>/user_schedules/<user_schedule_id>/change_name',
+    methods=['POST'])
 @require_jwt_token
 @require_same_user_id
 def rename_user_schedule(user_id, user_schedule_id):

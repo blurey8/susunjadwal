@@ -21,7 +21,8 @@ BASE_URL = "https://academic.ui.ac.id/main"
 AUTH_URL = f"{BASE_URL}/Authentication/Index"
 CHANGEROLE_URL = f"{BASE_URL}/Authentication/ChangeRole"
 DETAIL_SCHEDULE_URL = f"{BASE_URL}/Schedule/Index?period={{period}}&search="
-GENERAL_SCHEDULE_URL = f"{BASE_URL}/Schedule/IndexOthers?fac={{fac}}&org={{org}}&per={{period}}&search="
+GENERAL_SCHEDULE_URL = f"""{BASE_URL}/Schedule/IndexOthers
+                        ?fac={{fac}}&org={{org}}&per={{period}}&search="""
 DEFAULT_CREDENTIAL = "01.00.12.01"
 
 

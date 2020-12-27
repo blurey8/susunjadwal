@@ -41,8 +41,18 @@ class TestScheduleItem(TestBase):
 
     def test_schedule_item_fields_validation(self):
         test_cases = [
-            {"day": "Monday" * 10, "start": "Start", "end": "End", "room": "Room"},
-            {"day": "Monday" * 10, "start": "Start" * 5, "end": "End", "room": "Room"},
+            {
+                "day": "Monday" * 10,
+                "start": "Start",
+                "end": "End",
+                "room": "Room"
+            },
+            {
+                "day": "Monday" * 10,
+                "start": "Start" * 5,
+                "end": "End",
+                "room": "Room"
+            },
             {
                 "day": "Monday" * 10,
                 "start": "Start" * 5,
@@ -108,14 +118,16 @@ class TestClass(TestBase):
     def test_serialize_with_schedules(self):
         class_item = Class(
             name="Class",
-            schedule_items=[self.generate_random_schedule_item() for _ in range(10)],
+            schedule_items=[self.generate_random_schedule_item()
+                            for _ in range(10)],
             lecturer=["John", "Troy"],
         )
 
         serialized_class = class_item.serialize()
 
         assert serialized_class["name"] == class_item.name
-        assert len(serialized_class["schedule_items"]) == len(class_item.schedule_items)
+        assert len(serialized_class["schedule_items"]) == len(
+            class_item.schedule_items)
         for i in range(len(serialized_class["schedule_items"])):
             assert (
                 serialized_class["schedule_items"][i]
@@ -205,7 +217,8 @@ class TestCourse(TestBase):
         assert serialized_course["credit"] == course.credit
         assert serialized_course["term"] == course.term
         for i in range(len(serialized_course["classes"])):
-            assert serialized_course["classes"][i] == course["classes"][i].serialize()
+            assert serialized_course["classes"][i] \
+                == course["classes"][i].serialize()
 
     def test_course_fields_validation(self):
         test_cases = [
@@ -341,7 +354,8 @@ class TestPeriod(TestBase):
         serialized_period = period.serialize()
 
         self.assert_serialization_contains_keys(
-            keys=["name", "is_detail", "courses"], serialized_object=serialized_period
+            keys=["name", "is_detail", "courses"],
+            serialized_object=serialized_period
         )
 
     def test_serialize_with_empty_courses(self):
@@ -371,7 +385,8 @@ class TestPeriod(TestBase):
         assert serialized_period["name"] == period.name
         assert serialized_period["is_detail"] == period.is_detail
         for i in range(len(serialized_period["courses"])):
-            assert serialized_period["courses"][i] == period.courses[i].serialize()
+            assert serialized_period["courses"][i] \
+                == period.courses[i].serialize()
 
     def test_period_fields_validation(self):
         course = self.generate_random_course_item()

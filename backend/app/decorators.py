@@ -11,7 +11,8 @@ def require_same_user_id(func):
         if(data['user_id'] == kwargs['user_id']):
             return func(*args, **kwargs)
         return jsonify({
-            'message': 'Unauthorized. Only the resource owner can access this endpoint'
+            'message':
+            'Unauthorized. Only the resource owner can access this endpoint'
         }), 401
     return decorated_func
 
