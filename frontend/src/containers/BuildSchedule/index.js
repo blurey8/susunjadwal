@@ -1,20 +1,20 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import styled from "styled-components";
-import Helmet from "react-helmet";
+import React, { useEffect, useState, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import styled from 'styled-components';
+import Helmet from 'react-helmet';
 
-import { getCourses } from "services/api";
-import SelectedCourses from "containers/SelectedCourses";
-import { setLoading } from "redux/modules/appState";
-import { setCourses as reduxSetCourses } from "redux/modules/courses";
+import { getCourses } from 'services/api';
+import SelectedCourses from 'containers/SelectedCourses';
+import { setLoading } from 'redux/modules/appState';
+import { setCourses as reduxSetCourses } from 'redux/modules/courses';
 
-import Course from "./Course";
-import Checkout from "./Checkout";
-import Detail from "./Detail";
+import Course from './Course';
+import Checkout from './Checkout';
+import Detail from './Detail';
 
 function BuildSchedule({ history }) {
-  const auth = useSelector(state => state.auth);
-  const isMobile = useSelector(state => state.appState.isMobile);
+  const auth = useSelector((state) => state.auth);
+  const isMobile = useSelector((state) => state.appState.isMobile);
   const [detailData, setDetailData] = useState(null);
 
   const dispatch = useDispatch();
@@ -23,7 +23,7 @@ function BuildSchedule({ history }) {
   const [isCoursesDetail, setCoursesDetail] = useState(null);
 
   const fetchCourses = useCallback(
-    async majorId => {
+    async (majorId) => {
       dispatch(setLoading(true));
       const { data } = await getCourses(majorId);
       setCourses(data.courses);
@@ -31,11 +31,11 @@ function BuildSchedule({ history }) {
       dispatch(reduxSetCourses(data.courses));
       setTimeout(() => dispatch(setLoading(false)), 1000);
     },
-    [dispatch]
+    [dispatch],
   );
 
   useEffect(() => {
-    const majorId = auth.majorId;
+    const { majorId } = auth;
     fetchCourses(majorId);
   }, [auth, fetchCourses]);
 
@@ -51,8 +51,8 @@ function BuildSchedule({ history }) {
             LINE (@rye2953f). Terima kasih :D
           </InfoContent>
         )}
-        {courses &&
-          courses.map((course, idx) => (
+        {courses
+          && courses.map((course, idx) => (
             <Course key={`${course.name}-${idx}`} course={course} />
           ))}
       </CoursePickerContainer>
@@ -63,15 +63,11 @@ function BuildSchedule({ history }) {
       )}
       <Checkout
         isMobile={isMobile}
-        onClickDetail={isConflict =>
-          setDetailData({ opened: true, isConflict: isConflict })
-        }
+        onClickDetail={(isConflict) => setDetailData({ opened: true, isConflict })}
       />
       {detailData && detailData.opened && (
         <Detail
-          closeDetail={() =>
-            setDetailData({ opened: false, isConflict: detailData.isConflict })
-          }
+          closeDetail={() => setDetailData({ opened: false, isConflict: detailData.isConflict })}
           isConflict={detailData && detailData.isConflict}
         />
       )}
@@ -92,9 +88,8 @@ const InfoContent = styled.div`
 `;
 
 const CoursePickerContainer = styled.div`
-  padding: ${({ isMobile }) =>
-    isMobile ? "1rem 1rem 3rem 1rem" : "32px 48px"};
-  width: ${({ isMobile }) => (isMobile ? "100%" : "75%;")};
+  padding: ${({ isMobile }) => (isMobile ? '1rem 1rem 3rem 1rem' : '32px 48px')};
+  width: ${({ isMobile }) => (isMobile ? '100%' : '75%;')};
 
   h1 {
     font-size: 24px;

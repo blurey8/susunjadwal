@@ -1,5 +1,6 @@
-import { loadAuth } from "utils/auth";
-export const SET_AUTH = "SET_AUTH";
+import { loadAuth } from 'utils/auth';
+
+export const SET_AUTH = 'SET_AUTH';
 
 export default function reducer(state = loadAuth(), { type, payload }) {
   switch (type) {
@@ -13,6 +14,6 @@ export default function reducer(state = loadAuth(), { type, payload }) {
 export function setAuth(auth) {
   return {
     type: SET_AUTH,
-    payload: auth
+    payload: auth,
   };
 }

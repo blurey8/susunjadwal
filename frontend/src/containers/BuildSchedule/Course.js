@@ -1,18 +1,23 @@
-import React from "react";
-import styled from "styled-components";
-import { useSelector } from "react-redux";
+import React from 'react';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
-import CourseClass from "./CourseClass";
+import CourseClass from './CourseClass';
+
 function Course({ course }) {
-  const isMobile = useSelector(state => state.appState.isMobile);
+  const isMobile = useSelector((state) => state.appState.isMobile);
 
   return (
     <div>
       <CourseTitle>
         {course.name}
         <span>
-          {" "}
-          ({course.credit}&nbsp;SKS,&nbsp;Term&nbsp;{course.term})
+          {' '}
+          (
+          {course.credit}
+&nbsp;SKS,&nbsp;Term&nbsp;
+          {course.term}
+          )
         </span>
       </CourseTitle>
       <CourseContainer>
@@ -25,7 +30,7 @@ function Course({ course }) {
             <div>Pengajar</div>
           </Header>
         )}
-        {course.classes.map(currentClass => (
+        {course.classes.map((currentClass) => (
           <CourseClass
             key={currentClass.name}
             course={course}
@@ -79,7 +84,7 @@ const CourseTitle = styled.h2`
 
   span {
     display: inline;
-    // ${({ isMobile }) => isMobile && `margin-left: 0.5rem;`}
+    // ${({ isMobile }) => isMobile && 'margin-left: 0.5rem;'}
 
     color: white;
     font-weight: 400;

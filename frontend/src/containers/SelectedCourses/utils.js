@@ -1,7 +1,7 @@
 export function isScheduleConflict(schedules, schedule) {
   return !!schedules
-    .filter(other => other.parentName !== schedule.parentName)
-    .find(other => {
+    .filter((other) => other.parentName !== schedule.parentName)
+    .find((other) => {
       for (const item1 of schedule.schedule_items) {
         const start = parseFloat(item1.start);
         const end = parseFloat(item1.end);

@@ -1,9 +1,9 @@
-export const ADD_SCHEDULE = "ADD_SCHEDULE";
-export const REMOVE_SCHEDULE = "REMOVE_SCHEDULE";
-export const CLEAR_SCHEDULE = "CLEAR_SCHEDULE";
+export const ADD_SCHEDULE = 'ADD_SCHEDULE';
+export const REMOVE_SCHEDULE = 'REMOVE_SCHEDULE';
+export const CLEAR_SCHEDULE = 'CLEAR_SCHEDULE';
 
 function filterSchedule(schedules, { parentName }) {
-  return schedules.filter(schedule => schedule.parentName !== parentName);
+  return schedules.filter((schedule) => schedule.parentName !== parentName);
 }
 
 export default function reducer(state = [], { type, payload }) {
