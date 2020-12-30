@@ -11,6 +11,14 @@
 1. Install all dependencies using `npm install`
 2. Run the project by using `npm start`
 
+### Unit Testing
+1. Run the unit test by using `npm run test`
+2. Run the unit test with showing code coverage by using `npm run test -- --coverage`
+
+### Linter and fixes files
+1. Run linter by using `npm run lint`
+2. Force to fix code `npm run lint --fix`
+
 ### Production
 
 1. Run `npm run build`
